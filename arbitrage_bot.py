@@ -93,7 +93,7 @@ if __name__ == '__main__':
 
         # Filter Pairs according to base currency
         all_pairs = [pair for pair in pairs if pair.endswith(base_currency) or pair.endswith(second_currency) or pair.endswith(get_normalized_pair(second_currency))]
-        print(all_pairs)
+
         # Get Balances
         prices = get_prices(all_pairs)
 
@@ -128,7 +128,7 @@ if __name__ == '__main__':
                     break  # Exit loop on failed trade
 
                 # Wait for the first order to complete
-                if second_currency == 'XBT':
+                if second_currency == 'BTC':
                     while get_balances('XXBT') == 0:
                         print(f"Balance of {second_currency}: {get_balances('XXBT')}")
                         logging.info("Waiting for order to complete...")
