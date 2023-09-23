@@ -54,20 +54,3 @@ Before running the bot, ensure you have the following prerequisites installed:
     ```
 
 3. Monitor the console for logging information about potential arbitrage opportunities and executed trades.
-
-## Donations
-If this project adds value to you and you'd like to support the developer, consider making a donation:
-```
-Bitcoin (Bitcoin Network): 3FdFK2Qowj9VSGomsmQZrXqs6YYKL9sfeY
-```
-```
-USDT (Ethereum Network): 0x316fcde48ebdfad89e94346eced4c86a91379c0e
-```
-
-## Contributing
-
-Feel free to fork this project, submit pull requests, or open issues with suggestions, optimizations, or bug reports.
-
-## License
-
-This project is licensed under the Creative Commons Zero v1.0 Universal License - see the [LICENSE](LICENSE) file for details.

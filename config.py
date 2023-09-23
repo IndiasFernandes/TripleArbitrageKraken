@@ -22,6 +22,3 @@ threshold_profit = 0.02  # Example: 0.02 for 2%
 
 # Interval (in seconds) to check orders on the exchange
 check_order_interval = 0.01  # Example: 0.01 for 10 milliseconds
-
-# Trading fees (as a decimal), if applicable (e.g., 0.0025 for 0.25% fee)
-fees = 0  # Set to the actual trading fee percentage if applicable

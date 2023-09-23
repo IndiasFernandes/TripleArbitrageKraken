@@ -65,26 +65,24 @@ if __name__ == '__main__':
     balance_second_currency = float(get_balances('XXBT'))
     logging.info(f"BTC Balance: {balance_second_currency}")
     if balance_second_currency != 0:
-        logging.info(f"Converting {second_currency} to {base_currency}")
+        logging.info(f"Trying to convert {second_currency} to {base_currency}")
         response = execute_market_trade(
             'XBTUSDT',
             'sell',
             balance_second_currency
         )
-        logging.info(f"Conversion response: {response}")
 
     # Start by converting all the coins back to USDT
     for currency in third_currency_list:
         balances = get_balances([currency])
         logging.info(f"{currency} Balance: {balances[currency]}")
         if balances[currency] != 0:
-            logging.info(f"Converting {currency} to {base_currency}")
+            logging.info(f"Trying to convert {currency} to {base_currency}")
             response = execute_market_trade(
                 get_normalized_pair(currency + base_currency),
                 'sell',
                 balances[currency]
             )
-            logging.info(f"Conversion response: {response}")
 
     while True:
 
@@ -123,49 +121,59 @@ if __name__ == '__main__':
 
                 # Execute the first trade
                 response = execute_market_trade(normalized_first_pair, 'buy', volume_to_trade)
-                if response is None:
-                    logging.error("Trade failed. Exiting.")
-                    break  # Exit loop on failed trade
 
                 # Wait for the first order to complete
                 if second_currency == 'BTC':
-                    while get_balances('XXBT') == 0:
-                        print(f"Balance of {second_currency}: {get_balances('XXBT')}")
-                        logging.info("Waiting for order to complete...")
-                        time.sleep(2)
-                else:
-                    while get_balances([second_currency])[second_currency] == 0:
-                        print(f"Balance of {second_currency}: {get_balances([second_currency])[second_currency]}")
-                        logging.info("Waiting for order to complete...")
-                        time.sleep(2)
+                    second_currency = 'XXBT'
 
-                # Determine the volume to trade for the second pair
+
+
+
+
+
+
+                while get_balances(second_currency) == 0:
+                    print(f"Balance of {second_currency}: {get_balances([second_currency])}")
+                    logging.info("Waiting for order to complete...")
+                    time.sleep(2)
+
+                # Determine the volume to trade for the first pair
                 volume_to_trade = round(
-                    get_balances([second_currency])[second_currency] / prices[second_pair] * percentage_of_full_amount,
+                    get_balances(second_currency)/ prices[second_pair] * percentage_of_full_amount,
                     5)
                 logging.info(
                     f'Volume to Trade ({percentage_of_full_amount * 100}% of {second_pair}) : {volume_to_trade}')
 
+                if second_currency == 'XXBT':
+                    second_currency = 'BTC'
+
                 # Execute the second trade
                 response = execute_market_trade(second_pair, 'buy', volume_to_trade)
-                if response is None:
-                    logging.error("Trade failed. Exiting.")
-                    break  # Exit loop on failed trade
 
                 # Wait for the second order to complete
-                while get_balances([third_currency])[third_currency] == 0:
+                while get_balances(third_currency) == 0:
                     logging.info("Waiting for order to complete...")
                     time.sleep(2)
 
-                # Determine the volume to trade for the third pair
-                volume_to_trade = get_balances([third_currency])[third_currency]
-                logging.info(f'Volume to Trade (100% of total) : {volume_to_trade}')
+
+
+
+
+
+                # Determine the volume to trade for the second pair
+                volume_to_trade = get_balances(third_currency)
+                logging.info(
+                    f'Volume to Trade ({percentage_of_full_amount * 100}% of {third_pair}) : {volume_to_trade}')
+
 
                 # Execute the third trade
                 response = execute_market_trade(third_pair, 'sell', volume_to_trade)
-                if response is None:
-                    logging.error("Trade failed. Exiting.")
-                    break  # Exit loop on failed trade
+
+
+                # Wait for the second order to complete
+                while get_balances(third_currency) > 0:
+                    logging.info("Waiting for order to complete...")
+                    time.sleep(2)
 
                 # Update the current amount
                 final_amount = get_balances([base_currency])[base_currency]

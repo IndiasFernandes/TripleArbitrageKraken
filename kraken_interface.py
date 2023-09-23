@@ -47,11 +47,10 @@ def execute_market_trade(pair, trade_type, volume):
             'volume': str(volume)
         }
     )
-    if response['error']:
-        logging.error(f"Error placing order: {response['error']}")
-        return None
-    logging.info(f"Order placed successfully: {response['result']}")
-    return response
+    if not response['error']:
+        logging.info(f"Order for {pair} placed successfully : {response['result']['descr']['order']}")
+        return response
+
 
 def get_normalized_pair(pair):
     """Normalize the pairs according to Kraken's naming convention."""
